@@ -1,5 +1,5 @@
 import express from "express";
-import { registerUser } from "../controllers/userControllers.js";
+import { loginUser, registerUser } from "../controllers/userControllers.js";
 import { userRegisterSchema } from "../schemas/userCredentialsSchema.js";
 import { validate } from "express-validation";
 
@@ -11,5 +11,6 @@ userRouter.post(
   validate(userRegisterSchema, {}, { abortEarly: false }),
   registerUser
 );
+userRouter.post("/login", loginUser);
 
 export default userRouter;
