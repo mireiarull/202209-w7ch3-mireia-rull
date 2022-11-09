@@ -1,11 +1,11 @@
 import "./loadEnvironments.js";
 import connectDatabase from "./database/index.js";
-import startServer from "./server/index.js";
 import chalk from "chalk";
 import debugCreator from "debug";
 import { mongo } from "mongoose";
 import app from "./server/app.js";
 import environment from "./loadEnvironments.js";
+import startServer from "./server/index.js";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const { MongoServerError } = mongo;
