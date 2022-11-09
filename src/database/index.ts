@@ -1,4 +1,4 @@
-import environment from "../loadEnvironments.js";
+import environment from "../loadEnvironment.js";
 
 import mongoose from "mongoose";
 
