@@ -1,10 +1,10 @@
-import "./loadEnvironments.js";
+import "./loadEnvironment.js";
 import connectDatabase from "./database/index.js";
 import chalk from "chalk";
 import debugCreator from "debug";
 import { mongo } from "mongoose";
 import app from "./server/app.js";
-import environment from "./loadEnvironments.js";
+import environment from "./loadEnvironment.js";
 import startServer from "./server/index.js";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
