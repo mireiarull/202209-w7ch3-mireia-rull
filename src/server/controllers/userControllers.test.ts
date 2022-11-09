@@ -1,7 +1,9 @@
 import type { Credentials } from "../../types";
 import type { NextFunction, Request, Response } from "express";
 import User from "../../database/models/User";
-import { registerUser } from "./userControllers";
+import { loginUser, registerUser } from "./userControllers";
+import CustomError from "../../CustomError/CustomError";
+import bcrypt from "bcryptjs";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -31,6 +33,62 @@ describe("Given a register controller", () => {
       User.create = jest.fn().mockResolvedValueOnce(registerBody);
 
       await registerUser(req as Request, res as Response, next as NextFunction);
+
+      expect(res.status).toHaveBeenCalledWith(expectedStatus);
+      expect(res.json).toHaveBeenCalled();
+    });
+  });
+});
+
+describe("Given a loginUser controller", () => {
+  const loginBody: Credentials = {
+    username: "mireia",
+    password: "paco123",
+  };
+
+  const req: Partial<Request> = {
+    body: loginBody,
+  };
+
+  describe("When it receives a request with an invalid username", () => {
+    test("Then it should invoke the next function with a username error", async () => {
+      User.findOne = jest.fn().mockResolvedValueOnce(null);
+      const usernameError = new CustomError(
+        "Username not found",
+        401,
+        "Wrong credentials"
+      );
+
+      await loginUser(req as Request, res as Response, next as NextFunction);
+
+      expect(next).toBeCalledWith(usernameError);
+    });
+  });
+
+  describe("When it receives a valid username 'mireia' and the wrong password", () => {
+    test("Then it should invoke the next function with a password error", async () => {
+      User.findOne = jest.fn().mockResolvedValueOnce(loginBody);
+      const passwordError = new CustomError(
+        "Password is incorrect",
+        401,
+        "Wrong credentials"
+      );
+
+      bcrypt.compare = jest.fn().mockResolvedValueOnce(false);
+
+      await loginUser(req as Request, res as Response, next as NextFunction);
+
+      expect(next).toBeCalledWith(passwordError);
+    });
+  });
+
+  describe("when it receives a valid username 'mireia' and a valid password '1234'", () => {
+    test("Then it should invoke the response method with a 200 status and its json method with a token", async () => {
+      const expectedStatus = 200;
+      User.findOne = jest.fn().mockResolvedValueOnce(loginBody);
+      bcrypt.compare = jest.fn().mockResolvedValueOnce(true);
+
+      await loginUser(req as Request, res as Response, next as NextFunction);
 
       expect(res.status).toHaveBeenCalledWith(expectedStatus);
       expect(res.json).toHaveBeenCalled();
