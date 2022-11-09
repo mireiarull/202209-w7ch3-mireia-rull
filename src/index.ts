@@ -1,20 +1,23 @@
-import "./loadEnvirontment.js";
+import "./loadEnvironments.js";
 import connectDatabase from "./database/index.js";
 import startServer from "./server/index.js";
 import chalk from "chalk";
 import debugCreator from "debug";
 import { mongo } from "mongoose";
 import app from "./server/app.js";
-import { port, mongoDbUrl } from "./loadEnvironments";
+import environment from "./loadEnvironments.js";
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const { MongoServerError } = mongo;
 
-const debug = debugCreator("robots: server: root");
+const debug = debugCreator("items: server: root");
 
 try {
-  await startServer(app, +port);
-  debug(chalk.yellow(`Server listening on: http://localhost:${port}`));
-  await connectDatabase(mongoDbUrl);
+  await startServer(app, +environment.port);
+  debug(
+    chalk.yellow(`Server listening on: http://localhost:${environment.port}`)
+  );
+  await connectDatabase(environment.mongoDbUrl);
   debug(chalk.green("Connection to database was successfull"));
 } catch (error: unknown) {
   if (error instanceof MongoServerError) {
