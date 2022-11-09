@@ -2,6 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import debugCreator from "debug";
 import CustomError from "../../CustomError/CustomError.js";
 import chalk from "chalk";
+import { ValidationError } from "express-validation";
 
 const debug = debugCreator("robots: server: middlewares: root");
 
@@ -28,7 +29,14 @@ export const generalError = (
   debug(chalk.red(error.message));
 
   const statusCode = error.statusCode ?? 500;
-  const publicMessage = error.publicMessage || "Something went wrong";
+  let publicMessage = error.publicMessage || "Something went wrong";
+
+  if (error instanceof ValidationError) {
+    error.details.body.forEach((error) => {
+      debug(chalk.red(error.message));
+    });
+    publicMessage = "Wrong data";
+  }
 
   res.status(statusCode).json({ error: publicMessage });
 };
