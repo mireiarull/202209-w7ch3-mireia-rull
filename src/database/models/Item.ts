@@ -1,3 +1,4 @@
+import type { InferSchemaType } from "mongoose";
 import { Schema, model } from "mongoose";
 
 const itemSchema = new Schema({
@@ -5,13 +6,19 @@ const itemSchema = new Schema({
     required: true,
     type: String,
   },
-  userId: {
-    required: true,
+  image: {
     type: String,
+    required: true,
+  },
+  owner: {
+    required: true,
+    type: Schema.Types.ObjectId,
   },
 });
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const Item = model("Item", itemSchema, "items");
+
+export type ItemStructure = InferSchemaType<typeof itemSchema>;
 
 export default Item;
