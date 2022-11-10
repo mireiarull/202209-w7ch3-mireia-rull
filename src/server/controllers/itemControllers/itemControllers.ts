@@ -20,12 +20,12 @@ export const createItem = async (req: CustomRequest, res: Response) => {
 
   await fs.rename(
     path.join("assets", "images", req.file.filename),
-    path.join("assets", "images", req.file.originalname)
+    path.join("assets", "images", req.file.filename + req.file.originalname)
   );
 
   const newItem = await Item.create({
     item,
-    image: req.file.originalname + req.file.filename,
+    image: req.file.filename + req.file.originalname,
     owner: userId,
   });
 
@@ -34,11 +34,14 @@ export const createItem = async (req: CustomRequest, res: Response) => {
 
 export const deleteItem: RequestHandler = async (req, res) => {
   const { id } = req.body as ItemId;
+
   const item = await Item.findById(id);
+
+  console.log(item);
 
   await fs.unlink(path.join("assets", "images", item.image));
 
   await Item.deleteOne({ id });
 
-  res.status(201).json({});
+  res.status(201).json({ item });
 };
