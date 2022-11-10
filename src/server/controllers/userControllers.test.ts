@@ -4,6 +4,8 @@ import User from "../../database/models/User";
 import { loginUser, registerUser } from "./userControllers";
 import CustomError from "../../CustomError/CustomError";
 import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -15,6 +17,8 @@ const res: Partial<Response> = {
 };
 
 const next = jest.fn();
+
+const token = jwt.sign({}, "secret");
 
 describe("Given a register controller", () => {
   const registerBody: Credentials = {
@@ -84,14 +88,21 @@ describe("Given a loginUser controller", () => {
 
   describe("when it receives a valid username 'mireia' and a valid password '1234'", () => {
     test("Then it should invoke the response method with a 200 status and its json method with a token", async () => {
+      const user = {
+        username: "admin",
+        password: "admin",
+      };
+      const userId = new mongoose.Types.ObjectId();
       const expectedStatus = 200;
-      User.findOne = jest.fn().mockResolvedValueOnce(loginBody);
+      req.body = user;
+      User.findOne = jest.fn().mockResolvedValueOnce({ ...user, _id: userId });
       bcrypt.compare = jest.fn().mockResolvedValueOnce(true);
+      jwt.sign = jest.fn().mockReturnValueOnce(token);
 
-      await loginUser(req as Request, res as Response, next as NextFunction);
+      await loginUser(req as Request, res as Response, null);
 
       expect(res.status).toHaveBeenCalledWith(expectedStatus);
-      expect(res.json).toHaveBeenCalled();
+      expect(res.json).toHaveBeenCalledWith({ token });
     });
   });
 });
