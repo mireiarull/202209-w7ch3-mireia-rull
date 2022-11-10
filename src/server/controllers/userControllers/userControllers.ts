@@ -1,11 +1,11 @@
-import "../../loadEnvironment.js";
+import "../../../loadEnvironment.js";
 import type { NextFunction, Request, Response } from "express";
 import bcrypt from "bcryptjs";
-import type { Credentials, UserTokenPayload } from "../../types.js";
-import User from "../../database/models/User.js";
-import CustomError from "../../CustomError/CustomError.js";
+import type { Credentials, UserTokenPayload } from "../../../types.js";
+import User from "../../../database/models/User.js";
+import CustomError from "../../../CustomError/CustomError.js";
 import type { Error } from "mongoose";
-import environment from "../../loadEnvironment.js";
+import environment from "../../../loadEnvironment.js";
 import jwt from "jsonwebtoken";
 
 export const registerUser = async (
@@ -23,7 +23,7 @@ export const registerUser = async (
       password: hashedPassword,
     });
 
-    res.status(201).json({ user: { id: newUser._id }, username });
+    res.status(201).json({ id: newUser._id, username });
   } catch (error: unknown) {
     const customError = new CustomError(
       (error as Error).message,

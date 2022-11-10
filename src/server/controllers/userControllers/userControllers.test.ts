@@ -1,8 +1,8 @@
-import type { Credentials } from "../../types";
+import type { Credentials } from "../../../types";
 import type { NextFunction, Request, Response } from "express";
-import User from "../../database/models/User";
+import User from "../../../database/models/User";
 import { loginUser, registerUser } from "./userControllers";
-import CustomError from "../../CustomError/CustomError";
+import CustomError from "../../../CustomError/CustomError";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
