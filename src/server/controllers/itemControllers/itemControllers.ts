@@ -37,8 +37,6 @@ export const deleteItem: RequestHandler = async (req, res) => {
 
   const item = await Item.findById(id);
 
-  console.log(item);
-
   await fs.unlink(path.join("assets", "images", item.image));
 
   await Item.deleteOne({ id });
