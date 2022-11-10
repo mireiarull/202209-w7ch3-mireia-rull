@@ -14,3 +14,7 @@ export interface UserTokenPayload extends JwtPayload {
 export interface CustomRequest extends Request {
   userId: string;
 }
+
+export interface ItemId {
+  id: string;
+}

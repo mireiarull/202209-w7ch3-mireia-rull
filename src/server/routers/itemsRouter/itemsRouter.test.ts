@@ -8,6 +8,7 @@ import type { Credentials } from "../../../types";
 import bcrypt from "bcryptjs";
 import User from "../../../database/models/User";
 import connectDatabase from "../../../database";
+import type { ItemStructure } from "../../../database/models/Item";
 import Item from "../../../database/models/Item";
 
 let server: MongoMemoryServer;
@@ -26,7 +27,7 @@ beforeEach(async () => {
   await Item.deleteMany();
 });
 
-describe("Given a GET method and '/items/list' endpoint", () => {
+describe("Given a GET method and '/items/listMyItems' endpoint", () => {
   describe("When it recevies a userId from the username mireia and password '123456'", () => {
     test("Then it should respond with a status 200 and a list of the user's items", async () => {
       const expectedStatus = 200;
@@ -50,9 +51,10 @@ describe("Given a GET method and '/items/list' endpoint", () => {
         environment.jwtSecret
       );
 
-      const userItem = {
+      const userItem: ItemStructure = {
         item: "bag",
-        userId: databaseUser._id,
+        owner: databaseUser._id,
+        image: "bag.jpg",
       };
 
       await Item.create(userItem);
