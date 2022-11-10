@@ -1,4 +1,4 @@
-import type { RequestHandler, Response } from "express";
+import type { Response } from "express";
 import type { ItemStructure } from "../../../database/models/Item.js";
 import Item from "../../../database/models/Item.js";
 import type { CustomRequest, ItemId } from "../../../types";
@@ -32,7 +32,7 @@ export const createItem = async (req: CustomRequest, res: Response) => {
   res.status(201).json({ newItem });
 };
 
-export const deleteItem: RequestHandler = async (req, res) => {
+export const deleteItem = async (req: CustomRequest, res: Response) => {
   const { id } = req.body as ItemId;
 
   const item = await Item.findById(id);
@@ -41,5 +41,5 @@ export const deleteItem: RequestHandler = async (req, res) => {
 
   await Item.deleteOne({ id });
 
-  res.status(201).json({ item });
+  res.status(200).json({ item });
 };

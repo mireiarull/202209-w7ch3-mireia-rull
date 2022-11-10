@@ -27,7 +27,7 @@ beforeEach(async () => {
   await Item.deleteMany();
 });
 
-describe("Given a GET method and '/items/listMyItems' endpoint", () => {
+describe("Given a GET method and '/items/list' endpoint", () => {
   describe("When it recevies a userId from the username mireia and password '123456'", () => {
     test("Then it should respond with a status 200 and a list of the user's items", async () => {
       const expectedStatus = 200;
