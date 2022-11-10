@@ -17,4 +17,7 @@ jobs:
       - name: Testing
         run: npm test
         env:
-          REACT_APP_API_URL_THECOCKTAILDB: ${{ secrets.REACT_APP_API_URL_THECOCKTAILDB }}
+          DEBUG: ${{ secrets.DEBUG }}
+          MONGODB_URL: ${{ secrets.MONGODB_URL }}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          MONGO_DEBUG: ${{secrets.MONGO_DEBUG}}
