@@ -1,8 +1,8 @@
 import express from "express";
 import morgan from "morgan";
 import { generalError, notFoundError } from "./middlewares/error.js";
-import itemsRouter from "./routers/itemsRouter.js";
-import userRouter from "./routers/usersRouter.js";
+import itemsRouter from "./routers/itemsRouter/itemsRouter.js";
+import userRouter from "./routers/usersRouter/usersRouter.js";
 
 const app = express();
 
