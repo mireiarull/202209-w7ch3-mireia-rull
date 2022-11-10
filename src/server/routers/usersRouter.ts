@@ -11,6 +11,10 @@ userRouter.post(
   validate(userRegisterSchema, {}, { abortEarly: false }),
   registerUser
 );
-userRouter.post("/login", loginUser);
+userRouter.post(
+  "/login",
+  validate(userRegisterSchema, {}, { abortEarly: false }),
+  loginUser
+);
 
 export default userRouter;
